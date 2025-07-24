@@ -7,8 +7,6 @@ services:
     container_name: python-api-compose
     ports:
       - "8000:80"
-    volumes:
-      - .:/app
 
   # A temporary service to run the training script
   python-api-train:
@@ -31,5 +29,24 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:8080
       - ASPNETCORE_ENVIRONMENT=Development
+       - ConnectionStrings__DefaultConnection=Host=db;Database=churn_db;Username=admin;Password=password
     depends_on:
       - python-api
+      - db # Make C# backend wait for the database
+
+  # The new PostgreSQL Database Service
+  db:
+    image: postgres:15
+    container_name: postgres-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=churn_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+# Top-level volumes declaration
+volumes:
+  postgres_data:
