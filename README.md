@@ -70,9 +70,9 @@ pip install -r requirements.txt
 ```
 
 ### **3. Train the Model**
-Run the Jupyter notebook (`Notebook.ipynb`) to preprocess the data and generate the model files:
+Run the `train.py` script to preprocess the data and generate the model files:
 ```bash
-jupyter notebook Notebook.ipynb
+python train.py
 ```
 
 ### **4. Run the Services**
@@ -144,15 +144,3 @@ docker run -p 80:80 churn-platform
   - **Controllers/PredictionController.cs**: API controller for handling prediction requests.
   - **Dockerfile**: Docker configuration for the C# backend.
 - **.gitignore**: Files and directories to ignore in version control.
-
----
-
-## Contributing
-
-Feel free to submit issues or pull requests to improve the project.
-
----
-
-## License
-
-This project is licensed under the MIT License.
