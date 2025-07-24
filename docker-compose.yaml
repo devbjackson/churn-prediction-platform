@@ -1,22 +1,35 @@
-version: '3.8'
-
 services:
   # The Python ML API Service
   python-api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: python-api-compose
     ports:
       - "8000:80"
+    volumes:
+      - .:/app
+
+  # A temporary service to run the training script
+  python-api-train:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: python-api-train-compose
+    command: python train.py
+    volumes:
+      - .:/app
 
   # The C# Backend Service
   csharp-backend:
-    build: ./ChurnPlatform.Backend
+    build:
+      context: ./ChurnPlatform.Backend
+      dockerfile: Dockerfile
     container_name: csharp-backend-compose
     ports:
       - "8001:8080"
     environment:
       - ASPNETCORE_URLS=http://+:8080
       - ASPNETCORE_ENVIRONMENT=Development
-    # Add this depends_on so the C# app waits for the Python API to be healthy
     depends_on:
       - python-api
