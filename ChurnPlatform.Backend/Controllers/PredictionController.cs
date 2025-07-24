@@ -4,6 +4,7 @@ using System.Text;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
+using ChurnPlatform.Backend.DTOs;
 
 namespace ChurnPlatform.Backend.Controllers 
 {
@@ -19,11 +20,13 @@ namespace ChurnPlatform.Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetChurnPrediction([FromBody] JsonElement customerData)
+        public async Task<IActionResult> GetChurnPrediction([FromBody] CustomerDataDto customerData)
         {
             var httpClient = _httpClientFactory.CreateClient();
             var pythonApiUrl = "http://python-api/predict";
-            var content = new StringContent(customerData.ToString(), Encoding.UTF8, "application/json");
+
+            var jsonContent = JsonSerializer.Serialize(customerData);
+            var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
             try
             {

@@ -1,0 +1,19 @@
+services:
+  # The Python ML API Service
+  python-api:
+    image: devinbjackson/churn-api:latest # Pulls from Docker Hub
+    container_name: python-api-prod
+    ports:
+      - "8000:80"
+
+  # The C# Backend Service
+  csharp-backend:
+    image: devinbjackson/churn-backend:latest # Pulls from Docker Hub
+    container_name: csharp-backend-prod
+    ports:
+      - "8001:8080"
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      - python-api
