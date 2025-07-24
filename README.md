@@ -1,6 +1,6 @@
 # Churn Prediction Platform
 
-This repository contains a multi-service machine learning platform for predicting customer churn. The platform includes a Python-based ML service using FastAPI and scikit-learn, a C# backend API, and Docker Compose orchestration for easy deployment.
+This repository contains a multi-service machine learning platform for predicting customer churn. The platform includes a Python-based ML service using FastAPI and scikit-learn, a C# backend API, a React frontend, and Docker Compose orchestration for easy deployment.
 
 ---
 
@@ -10,7 +10,8 @@ This repository contains a multi-service machine learning platform for predictin
 - **Model Training**: Logistic Regression model trained on customer churn data.
 - **Python ML API**: FastAPI-based REST API for serving ML predictions.
 - **C# Backend API**: ASP.NET Core backend that communicates with the Python ML service.
-- **Multi-Service Architecture**: Microservices architecture with separate Python ML and C# backend services.
+- **React Frontend**: A user-friendly interface built with React to interact with the prediction service. Users can input customer data manually, load sample or random data, and receive real-time churn predictions with confidence scores.
+- **Multi-Service Architecture**: Microservices architecture with separate Python ML, C# backend, and React frontend services.
 - **Docker Compose Support**: Complete containerization with service orchestration.
 - **Production-Ready**: Saves trained model and column structure for consistent predictions on new data.
 
@@ -49,8 +50,11 @@ docker-compose up --build
 ```
 
 This will start:
+- **React Frontend** on port `3000` (http://localhost:3000)
 - **Python ML API** on port `8000`
 - **C# Backend API** on port `8001`
+
+You can access the web interface by navigating to `http://localhost:3000`.
 
 ---
 
@@ -58,7 +62,7 @@ This will start:
 
 If you prefer to run the services without Docker, follow these steps:
 
-### **1. Set Up Virtual Environment**
+### **1. Set Up Virtual Environment (for Python)**
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
@@ -66,7 +70,13 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 ### **2. Install Dependencies**
 ```bash
+# For Python API
 pip install -r requirements.txt
+
+# For Frontend
+cd frontend
+npm install
+cd ..
 ```
 
 ### **3. Train the Model**
@@ -88,10 +98,16 @@ cd ChurnPlatform.Backend
 dotnet run
 ```
 
-**Note:** When running manually, the C# backend may need its configuration updated to locate the Python API at `http://localhost:8000`.
+#### **Run the React Frontend**
+```bash
+cd frontend
+npm start
+```
+
+**Note:** When running manually, the C# backend may need its configuration updated to locate the Python API at `http://localhost:8000`. The React frontend is configured to connect to the C# backend at `http://localhost:8001`.
 
 ### **Make Predictions**
-Send a POST request to the `/predict` endpoint with customer data:
+You can use the React UI to make predictions, or send a POST request directly to the `/predict` endpoint with customer data:
 ```json
 {
     "gender": "Male",
@@ -136,11 +152,16 @@ docker run -p 80:80 churn-platform
 
 - **Notebook.ipynb**: Jupyter notebook for data preprocessing and model training.
 - **main.py**: FastAPI application for serving predictions.
-- **requirements.txt**: List of dependencies.
-- **Dockerfile**: Docker configuration for containerizing the application.
+- **train.py**: Script for training the model.
+- **requirements.txt**: List of dependencies for the Python service.
+- **Dockerfile**: Docker configuration for the Python application.
 - **docker-compose.yaml**: Docker Compose configuration for multi-service deployment.
 - **ChurnPlatform.Backend/**: C# ASP.NET Core backend service.
   - **Program.cs**: Main application entry point.
   - **Controllers/PredictionController.cs**: API controller for handling prediction requests.
   - **Dockerfile**: Docker configuration for the C# backend.
+- **frontend/**: React frontend application.
+  - **src/App.js**: Main React component for the user interface.
+  - **package.json**: Lists dependencies for the frontend.
+  - **Dockerfile**: Docker configuration for the React application.
 - **.gitignore**: Files and directories to ignore in version control.

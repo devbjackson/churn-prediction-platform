@@ -29,10 +29,21 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:8080
       - ASPNETCORE_ENVIRONMENT=Development
-       - ConnectionStrings__DefaultConnection=Host=db;Database=churn_db;Username=admin;Password=password
+      - ConnectionStrings__DefaultConnection=Host=db;Database=churn_db;Username=admin;Password=password
     depends_on:
       - python-api
-      - db # Make C# backend wait for the database
+      - db
+
+  # The new React Frontend Service
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend-compose
+    ports:
+      - "3000:80"
+    depends_on:
+      - csharp-backend
 
   # The new PostgreSQL Database Service
   db:

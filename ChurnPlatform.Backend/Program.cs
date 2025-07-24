@@ -8,6 +8,18 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// 1. Add CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:3000") // Allow React app
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 // Get the connection string from environment variables
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -15,14 +27,12 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<PredictionContext>(options =>
     options.UseNpgsql(connectionString));
 
-// Add services to the container.
 builder.Services.AddControllers();
-
-// Register HttpClientFactory so we can make requests to our Python API
 builder.Services.AddHttpClient();
 
-builder.Services.AddEndpointsApiExplorer();
+// Register our example providers
 builder.Services.AddSwaggerExamplesFromAssemblies(Assembly.GetEntryAssembly());
+
 builder.Services.AddSwaggerGen(options =>
 {
     options.EnableAnnotations();
@@ -37,6 +47,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+// app.UseHttpsRedirection();
+
+app.UseRouting();
+
+// 2. Enable the CORS policy
+app.UseCors();
 
 app.UseAuthorization();
 
