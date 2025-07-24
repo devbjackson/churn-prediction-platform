@@ -5,6 +5,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Net.Http.Json;
 using ChurnPlatform.Backend.DTOs;
+using Swashbuckle.AspNetCore.Filters;
+using ChurnPlatform.Backend.SwaggerExamples;
 
 namespace ChurnPlatform.Backend.Controllers 
 {
@@ -20,6 +22,7 @@ namespace ChurnPlatform.Backend.Controllers
         }
 
         [HttpPost]
+        [SwaggerRequestExample(typeof(CustomerDataDto), typeof(CustomerDataRequestExample))] 
         public async Task<IActionResult> GetChurnPrediction([FromBody] CustomerDataDto customerData)
         {
             var httpClient = _httpClientFactory.CreateClient();
@@ -37,7 +40,7 @@ namespace ChurnPlatform.Backend.Controllers
                     var predictionResult = await response.Content.ReadFromJsonAsync<object>();
                     return Ok(predictionResult);
                 }
-                
+
                 return StatusCode((int)response.StatusCode, await response.Content.ReadAsStringAsync());
             }
             catch (HttpRequestException ex)
