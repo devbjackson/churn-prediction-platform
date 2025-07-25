@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 using System.Net.Http.Json;
 using ChurnPlatform.Backend.DTOs;
 using Swashbuckle.AspNetCore.Filters;
-using ChurnPlatform.Backend.Data; // <-- Add this
-using ChurnPlatform.Backend.Data.Models; // <-- Add this
+using ChurnPlatform.Backend.Data;
+using ChurnPlatform.Backend.Data.Models;
+using Microsoft.Extensions.Configuration;
 using System;
 
 namespace ChurnPlatform.Backend.Controllers
@@ -18,13 +19,15 @@ namespace ChurnPlatform.Backend.Controllers
     public class PredictionController : ControllerBase
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly PredictionContext _context; // <-- Add DbContext field
+        private readonly PredictionContext _context;
+        private readonly IConfiguration _configuration;
 
         // Inject both the HttpClientFactory and the PredictionContext
-        public PredictionController(IHttpClientFactory httpClientFactory, PredictionContext context)
+        public PredictionController(IHttpClientFactory httpClientFactory, PredictionContext context, IConfiguration configuration)
         {
             _httpClientFactory = httpClientFactory;
             _context = context;
+            _configuration = configuration;
         }
 
         [HttpPost]
