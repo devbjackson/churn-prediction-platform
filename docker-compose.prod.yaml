@@ -1,0 +1,43 @@
+services:
+  python-api:
+    image: devinbjackson/churn-api:latest
+    container_name: python-api-prod
+    ports:
+      - "8000:80"
+
+  csharp-backend:
+    image: devinbjackson/churn-backend:latest
+    container_name: csharp-backend-prod
+    ports:
+      - "8001:8080"
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_ENVIRONMENT=Development # In a real prod, this would be "Production"
+      - ConnectionStrings__DefaultConnection=Host=db;Database=churn_db;Username=admin;Password=password
+    depends_on:
+      - python-api
+      - db
+
+  # Add the frontend service here
+  frontend:
+    image: devinbjackson/churn-frontend:latest # Assumes CI/CD pushes this image
+    container_name: frontend-prod
+    ports:
+      - "3000:80"
+    depends_on:
+      - csharp-backend
+
+  db:
+    image: postgres:15
+    container_name: postgres-db
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=churn_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
