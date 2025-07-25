@@ -1,6 +1,55 @@
 # Churn Prediction Platform
 
-This repository contains a multi-service machine learning platform for predicting customer churn. The platform includes a Python-based ML service using FastAPI and scikit-learn, a C# backend API, a React frontend, and Docker Compose orchestration for easy deployment.
+A full-stack application to predict customer churn using a machine learning model. It features a React frontend, a .NET backend, and a Python ML service, all containerized with Docker and deployed to Azure.
+
+---
+
+## Live Application
+
+*   **Frontend:** [https://churn-frontend-devbjackson.azurewebsites.net](https://churn-frontend-devbjackson.azurewebsites.net)
+*   **Backend API:** [https://churn-backend-devbjackson.azurewebsites.net/swagger](https://churn-backend-devbjackson.azurewebsites.net/swagger)
+*   **ML API:** [https://churn-api-devbjackson.azurewebsites.net/docs](https://churn-api-devbjackson.azurewebsites.net/docs)
+
+---
+
+## Architecture
+
+The platform is composed of three main services that work together:
+
+```mermaid
+graph TD;
+    subgraph User Interaction
+        A[User] --> B{React Frontend};
+    end
+
+    subgraph Backend Services
+        B --> C{.NET Backend API};
+        C --> D{Python ML API};
+    end
+
+    subgraph Data and Models
+        D --> E[ML Model];
+    end
+
+    style B fill:#61DAFB,stroke:#000,stroke-width:2px
+    style C fill:#512BD4,stroke:#000,stroke-width:2px
+    style D fill:#3776AB,stroke:#000,stroke-width:2px
+```
+
+1.  **React Frontend**: The user-facing application for submitting customer data for churn prediction.
+2.  **.NET Backend API**: Handles requests from the frontend, logs prediction queries, and communicates with the Python ML service.
+3.  **Python ML API**: A FastAPI service that serves predictions using a pre-trained scikit-learn model.
+
+---
+
+## Technologies Used
+
+-   **Frontend**: React, JavaScript
+-   **Backend**: C# / .NET 8
+-   **ML Service**: Python, FastAPI, Scikit-learn
+-   **Containerization**: Docker, Docker Compose
+-   **CI/CD**: GitHub Actions
+-   **Cloud Provider**: Microsoft Azure (App Service)
 
 ---
 
@@ -21,8 +70,8 @@ This repository contains a multi-service machine learning platform for predictin
 
 ### **Clone the Repository**
 ```bash
-git clone https://github.com/your-username/churn-platform.git
-cd churn-platform
+git clone https://github.com/devbjackson/churn-prediction-platform.git
+cd churn-prediction-platform
 ```
 
 ---
@@ -58,96 +107,6 @@ You can access the web interface by navigating to `http://localhost:3000`.
 
 ---
 
-## Alternative: Running Services Manually
-
-If you prefer to run the services without Docker, follow these steps:
-
-### **1. Set Up Virtual Environment (for Python)**
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-### **2. Install Dependencies**
-```bash
-# For Python API
-pip install -r requirements.txt
-
-# For Frontend
-cd frontend
-npm install
-cd ..
-```
-
-### **3. Train the Model**
-Run the `train.py` script to preprocess the data and generate the model files:
-```bash
-python train.py
-```
-
-### **4. Run the Services**
-
-#### **Run the Python ML API**
-```bash
-uvicorn main:app --host 0.0.0.0 --port 8000
-```
-
-#### **Run the C# Backend API**
-```bash
-cd ChurnPlatform.Backend
-dotnet run
-```
-
-#### **Run the React Frontend**
-```bash
-cd frontend
-npm start
-```
-
-**Note:** When running manually, the C# backend may need its configuration updated to locate the Python API at `http://localhost:8000`. The React frontend is configured to connect to the C# backend at `http://localhost:8001`.
-
-### **Make Predictions**
-You can use the React UI to make predictions, or send a POST request directly to the `/predict` endpoint with customer data:
-```json
-{
-    "gender": "Male",
-    "SeniorCitizen": 0,
-    "Partner": "Yes",
-    "Dependents": "No",
-    "tenure": 12,
-    "PhoneService": "Yes",
-    "MultipleLines": "No",
-    "InternetService": "DSL",
-    "OnlineSecurity": "No",
-    "OnlineBackup": "Yes",
-    "DeviceProtection": "No",
-    "TechSupport": "No",
-    "StreamingTV": "Yes",
-    "StreamingMovies": "No",
-    "Contract": "Month-to-month",
-    "PaperlessBilling": "Yes",
-    "PaymentMethod": "Electronic check",
-    "MonthlyCharges": 29.85,
-    "TotalCharges": 29.85
-}
-```
-
----
-
-## Docker Deployment
-
-### **Build the Docker Image**
-```bash
-docker build -t churn-platform .
-```
-
-### **Run the Docker Container**
-```bash
-docker run -p 80:80 churn-platform
-```
-
----
-
 ## File Structure
 
 - **Notebook.ipynb**: Jupyter notebook for data preprocessing and model training.
@@ -157,11 +116,5 @@ docker run -p 80:80 churn-platform
 - **Dockerfile**: Docker configuration for the Python application.
 - **docker-compose.yaml**: Docker Compose configuration for multi-service deployment.
 - **ChurnPlatform.Backend/**: C# ASP.NET Core backend service.
-  - **Program.cs**: Main application entry point.
-  - **Controllers/PredictionController.cs**: API controller for handling prediction requests.
-  - **Dockerfile**: Docker configuration for the C# backend.
 - **frontend/**: React frontend application.
-  - **src/App.js**: Main React component for the user interface.
-  - **package.json**: Lists dependencies for the frontend.
-  - **Dockerfile**: Docker configuration for the React application.
-- **.gitignore**: Files and directories to ignore in version control.
+- **.github/workflows/main.yml**: GitHub Actions workflow for CI/CD.
