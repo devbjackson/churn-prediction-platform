@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 import './App.css';
 
 // This is our static, sample customer for the first button
@@ -81,7 +81,7 @@ function App() {
     };
 
     try {
-      const response = await fetch('http://localhost:8001/Prediction', {
+      const response = await fetch('https://churn-backend-devbjackson.azurewebsites.net/Prediction', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

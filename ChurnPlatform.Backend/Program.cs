@@ -9,14 +9,18 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // 1. Add CORS policy
+var allowedOrigins = builder.Configuration["CORS_ORIGINS"] ?? "http://localhost:3000";
+var origins = allowedOrigins.Split(';');
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(
         policy =>
         {
-            policy.WithOrigins("http://localhost:3000") // Allow React app
-                .AllowAnyHeader()
-                .AllowAnyMethod();
+            // This is a temporary hardcoded value for debugging
+            policy.WithOrigins("https://churnstorage1175.z19.web.core.windows.net")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
         });
 });
 

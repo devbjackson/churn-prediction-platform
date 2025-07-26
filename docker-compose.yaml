@@ -25,9 +25,9 @@ services:
       dockerfile: Dockerfile
     container_name: csharp-backend-compose
     ports:
-      - "8001:8080"
+      - "8001:80"
     environment:
-      - ASPNETCORE_URLS=http://+:8080
+      - ASPNETCORE_URLS=http://+:80
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Host=db;Database=churn_db;Username=admin;Password=password
     depends_on:
