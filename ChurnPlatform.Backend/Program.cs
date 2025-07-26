@@ -8,18 +8,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Add CORS policy
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(
-        policy =>
-        {
-            policy.WithOrigins("http://localhost:3000") // Allow React app
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
-});
-
 // Get the connection string from environment variables
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -48,9 +36,6 @@ app.UseSwaggerUI();
 // app.UseHttpsRedirection();
 
 app.UseRouting();
-
-// 2. Enable the CORS policy
-app.UseCors();
 
 app.UseAuthorization();
 

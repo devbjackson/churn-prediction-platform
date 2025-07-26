@@ -35,7 +35,7 @@ namespace ChurnPlatform.Backend.Controllers
         public async Task<IActionResult> GetChurnPrediction([FromBody] CustomerDataDto customerData)
         {
             var httpClient = _httpClientFactory.CreateClient();
-            var pythonApiUrl = "http://python-api/predict";
+            var pythonApiUrl = _configuration["PythonApiUrl"];
 
             var jsonContent = JsonSerializer.Serialize(customerData);
             var content = new StringContent(jsonContent, Encoding.UTF8, "application/json");

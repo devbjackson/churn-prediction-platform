@@ -6,7 +6,7 @@ A full-stack application to predict customer churn using a machine learning mode
 
 ## Live Application
 
-*   **Frontend:** [https://churn-frontend-devbjackson.azurewebsites.net](https://churn-frontend-devbjackson.azurewebsites.net)
+*   **Frontend:** [https://churnstorage1175.z19.web.core.windows.net/](https://churnstorage1175.z19.web.core.windows.net/)
 *   **Backend API:** [https://churn-backend-devbjackson.azurewebsites.net/swagger](https://churn-backend-devbjackson.azurewebsites.net/swagger)
 *   **ML API:** [https://churn-api-devbjackson.azurewebsites.net/docs](https://churn-api-devbjackson.azurewebsites.net/docs)
 
